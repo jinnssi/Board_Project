@@ -15,9 +15,8 @@ public class BoardDAO implements InterBoardDAO {
 		// 중요 표시를 한 게시물 일 경우 m+숫자
 		boardseq = ("marky".equals(yn))? "m"+String.valueOf(++seq):String.valueOf(++seq);
 		dto.setSeq(boardseq);
-		
 		map.put(boardseq , dto);
-		System.out.println("map.size()=>"+map.size());
+//		System.out.println("map.size()=>"+map.size());
 	}
 
 	
@@ -36,26 +35,35 @@ public class BoardDAO implements InterBoardDAO {
 		String searchType = paraMap.get("searchType");
 		// 검색 내용에 맞는 key를 구해서 그에 맞는 boarddto를 keylist에 넣어두기  
 		Set<Entry<String, BoardDTO>> entrySet = map.entrySet();
-			for(Entry<String, BoardDTO> entry : entrySet){
-				if(word!="") {// 검색어 있을 경우 
-					if("name".equals(searchType)) {// 이름으로 검색한경우 
-						if( entry.getValue().getName().contains(word) ){
-							keyList.add(entry.getValue());
-						}
-					}else if("title".equals(searchType)) {// 제목으로 검색한경우
-						if( entry.getValue().getTitle().contains(word) ){
-							keyList.add(entry.getValue());
-						}
+		for(Entry<String, BoardDTO> entry : entrySet){
+			if(word!="") {// 검색어 있을 경우 
+				if("name".equals(searchType)) {// 이름으로 검색한경우 
+					if( entry.getValue().getName().contains(word) ){
+						keyList.add(entry.getValue());
 					}
-				}else { // 검색어 없을 경우 
-					keyList.add(entry.getValue());
+				}else if("title".equals(searchType)) {// 제목으로 검색한경우
+					if( entry.getValue().getTitle().contains(word) ){
+						keyList.add(entry.getValue());
+					}
 				}
-					
+			}else { // 검색어 없을 경우 
+				keyList.add(entry.getValue());
 			}
-			for(int i=startRno; i<=endRno;i++) {
-				boardList.add(keyList.get(i-1)); // startrno 부터 endrno 에 해당하는 boarddto 를 boardlist에 넣기   
+		}
+		if(word!="") {// 검색어 있을 경우
+			System.out.println("keyList.size()=>"+keyList.size());
+			for(int i=startRno-1; i<endRno;i++) {
+				boardList.add(keyList.get(i)); // startrno 부터 endrno 에 해당하는 boarddto 를 boardlist에 넣기   
+			}
+		}else {
+			System.out.println("map.size()=>"+map.size());
+			System.out.println("keyList.size()=>"+keyList.size());
+			for(int i=startRno-1; i<endRno;i++) {
+				boardList.add(keyList.get(i)); // startrno 부터 endrno 에 해당하는 boarddto 를 boardlist에 넣기   
 			}
 			
+		}
+		
 		return boardList;
 	}
 
@@ -130,20 +138,35 @@ public class BoardDAO implements InterBoardDAO {
 		List<String> wordList = new ArrayList<>();
 		// value로 key 찾기
 		Set<Entry<String, BoardDTO>> entrySet = map.entrySet();
- 	   for(Entry<String, BoardDTO> entry : entrySet){
-	     if("name".equals(type)) {// 이름으로 검색한경우 
-
-	    	 if( entry.getValue().getName().contains(word) ){
-	    		 wordList.add(entry.getValue().getName());
-	    	 }
-	    	 
-	     }else if("title".equals(type)) {
-	    	 
-	    	 if( entry.getValue().getTitle().contains(word) ){
-	    		 wordList.add(entry.getValue().getTitle());
-	    	 }
-	     }
+ 	   boolean bool = false;
+		for(Entry<String, BoardDTO> entry : entrySet){
+		   
+		   if("name".equals(type)) {// 이름으로 검색한경우 
+			   for(String str:wordList) {
+				   if(entry.getValue().getName().equals(str)) bool=true;
+			   }
+			   if(!bool) {
+				   if( entry.getValue().getName().contains(word) ){
+					   wordList.add(entry.getValue().getName());
+				   }
+			   }
+		   }
+		   else if("title".equals(type)) {
+			   for(String str:wordList) {
+				   if(entry.getValue().getTitle().equals(str)) bool=true;
+			   }
+			   
+			   if(!bool) {
+				   if( entry.getValue().getTitle().contains(word) ){
+					   wordList.add(entry.getValue().getTitle());
+				   }
+			   }
+		   }
+	   
+		   
 	   }
+ 	   
+ 	  
 		return wordList;
 	}
 

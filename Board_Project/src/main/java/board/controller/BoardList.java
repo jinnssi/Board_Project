@@ -46,7 +46,7 @@ public class BoardList extends HttpServlet {
 		
 		// 먼저 총게시물 건수(totalCount) 
 		int totalCount = 0;        // 총 게시물 건수
-        int sizePerPage = 10;       // 한 페이지당 보여줄 게시물 건수 
+        int sizePerPage = 5;       // 한 페이지당 보여줄 게시물 건수 
         int currentShowPageNo = 0; // 현재 보여주는 페이지번호로서, 초기치로는 1페이지로 설정함.
         int totalPage = 0;         // 총 페이지수(웹브라우저상에서 보여줄 총 페이지 개수, 페이지바)
       
@@ -55,12 +55,12 @@ public class BoardList extends HttpServlet {
         
         // 총게시물 건수(totalCount)
         totalCount = dao.getTotalCount(paraMap);
-        System.out.println("~~~ totalCount:"+totalCount);
+//        System.out.println("~~~ totalCount:"+totalCount);
         
         // 만약에 총게시물건수가 22개라면
         // 총 페이지수는 3개가 되어야한다.
         totalPage = (int)Math.ceil( (double)totalCount/sizePerPage);
-        System.out.println("~~~ totalPage:"+totalPage);
+//        System.out.println("~~~ totalPage:"+totalPage);
         // (double)22/10 ==> 2.2 ==> Math.ceil(2.2) ==> 3.0 ==> (int)3.0 ==> 3
         
         if(str_currentShowPageNo == null) { // 게시판에 보여지는 초기화면 

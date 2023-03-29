@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.simple.JSONArray;
 
 import board.model.BoardDAO;
 import board.model.BoardDTO;
 import board.model.InterBoardDAO;
 
 @WebServlet("/wordSearch.do")
-public class wordSearch extends HttpServlet {
+public class wordSearchJSON extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	InterBoardDAO dao = new BoardDAO();
@@ -40,12 +40,15 @@ public class wordSearch extends HttpServlet {
 			for(String word: wordList) {
 				JSONObject jsonobj = new JSONObject();
 				jsonobj.put("word", word);
-				jsonarr.add(jsonobj);
+				jsonarr.put(jsonobj);
 			}
+		}else {  // 조회된 것이 없다라면 
+			String json = jsonarr.toString(); 	// 문자열로 변환  
+			request.setAttribute("json", json);
 		}
 		
 		request.setAttribute("json", jsonarr.toString());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/board/boardAdd_success.jsp");  
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/common/jsonview.jsp");  
 		dispatcher.forward(request, response);
 		
 		

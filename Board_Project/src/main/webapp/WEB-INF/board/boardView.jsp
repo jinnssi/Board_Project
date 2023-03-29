@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String ctxPath = request.getContextPath();
 %>   
@@ -74,8 +76,8 @@
 					<div class="col-md-3 py-2">중요 게시물</div>
 					<div class="col-md-9 py-2">
 						<c:choose>
-							<c:when test="${requestScope.dto.markyn eq 'm-y'}"><span class="h5">O</span></c:when>
-							<c:when test="${requestScope.dto.markyn eq 'm-n'}"><span class="h5">X</span></c:when>
+							<c:when test="${fn:startsWith(requestScope.dto.seq, 'm')==true}"><span class="h5">O</span></c:when>
+							<c:when test="${fn:startsWith(requestScope.dto.seq, 'm')!=true}"><span class="h5">X</span></c:when>
 						</c:choose>
 					</div>
 				</div>
@@ -102,7 +104,7 @@
 							<p class="text-center"><button type="button" onclick="deleteboard('${requestScope.dto.seq}')" class="btn btn-danger">삭제하기</button></p>
 						</div>
 						<div class="col-md-3">
-							<p class="text-center"><button type="button" onclick="updateboard('${requestScope.dto.seq}')" class="btn btn-primary">내정보수정하기</button></p>
+							<p class="text-center"><button type="button" onclick="updateboard('${requestScope.dto.seq}')" class="btn btn-primary">수정하기</button></p>
 						</div>
 					</div>
 				</div>

@@ -12,12 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <title>게시판 리스트</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
-
-<%-- Bootstrap CSS --%>
 <link rel="stylesheet" href="<%= ctxPath%>/bootstrap-4.6.0-dist/css/bootstrap.min.css" type="text/css"> 
-
 <style type="text/css">
 
 	div#div1 {
@@ -44,8 +39,6 @@
 		display:none;
 	}
 	
-	
-
 </style>
 
 <script type="text/javascript" src="<%= ctxPath%>/js/jquery-3.6.0.min.js"></script>
@@ -69,8 +62,8 @@
 
 		// 검색시 검색조건 및 검색어 값 유지시키기
 		if( ${not empty requestScope.paradto} ) {
-			$("select#searchType").val("${requestScope.paradto.searchType}");
-			$("input#searchWord").val("${requestScope.paradto.searchWord}");
+			$("select#searchType").val("${requestScope.paraMap.searchType}");
+			$("input#searchWord").val("${requestScope.paraMap.searchWord}");
 		}
 		
 		<%-- 검색어 입력시 자동글 --%>
@@ -88,6 +81,7 @@
 						 ,"searchWord":$("input#searchWord").val()},
 					dataType:"JSON",
 					success:function(json){
+						console.log(json);
 		                  if(json.length > 0) { // 검색된 데이터가 있는 경우 
 		                     let html = "";
 		                     $.each(json, function(index, item) {
@@ -141,40 +135,34 @@
 </head>
 <body>
    
-   <div id="div1">
-	   <hr style="border: solid 1px red; margin: 40px 0;">
-
+   <div id="div1" >
 	   <div class="container-fluid">
 	   	   <h3>게시판 목록</h3>
 	   	   <c:if test="${not empty requestScope.boardList}">
 		   	   <table class="table table-hover">
 		   	       <thead>
 			          <tr>
-			             <th>번호</th>
-			             <th>닉네임</th>
-			             <th>제목</th>
-			             <th>내용</th>
+			             <th width="10%" >번호</th>
+			             <th width="15%" >닉네임</th>
+			             <th width="25%">제목</th>
+			             <th width="50%">내용</th>
 			          </tr>
 			       </thead>
 			       
 			       <tbody> 
 			       <c:forEach var="dto" items="${requestScope.boardList}" varStatus="status">
-					   <c:set var = "seq" value = "${dto.seq}" />
-				       <c:if test="${ fn:startsWith(seq, 'm')==true }"><!-- 중요 표시한 게시글 -->
-				       		<tr style="background-color: yellow">
-				       			<td>${status.count}</td> <!-- 반복의 횟수  -->
-				       			<td><span>${dto.seq}</span>${dto.name}</td>
+				       <c:if test="${ fn:startsWith(dto.seq, 'm')==true }"><!-- 중요 표시한 게시글 -->
+				       		<tr style="background-color: grey">
+				       			<td>${status.count}</td>
+				       			<td><span hidden="">${dto.seq}</span>${dto.name}</td>
 				       			<td>${dto.title}</td>
 				       			<td>${dto.content}</td>
 				       		</tr>
 				       </c:if>
-				    </c:forEach>
-			       <c:forEach var="dto" items="${requestScope.boardList}" varStatus="status">
-					   <c:set var = "seq" value = "${dto.seq}" />
-				       <c:if test="${ fn:startsWith(seq, 'm')==false }"><!-- 중요 표시안한 게시글 --> 
+				       <c:if test="${ fn:startsWith(dto.seq, 'm')==false }"><!-- 중요 표시안한 게시글 --> 
 				       		<tr>
-				       			<td>${status.count}</td> <!-- 반복의 횟수  -->
-				       			<td><span>${dto.seq}</span>${dto.name}</td>
+				       			<td>${status.count}</td>
+				       			<td><span hidden="">${dto.seq}</span>${dto.name}</td>
 				       			<td>${dto.title}</td>
 				       			<td>${dto.content}</td>
 				       		</tr>
